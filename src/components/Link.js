@@ -26,7 +26,7 @@ class CSVLink extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props !== prevProps) {
-      const { data, headers, separator, uFEFF } = this.props;
+      const { data, headers, separator, uFEFF } = prevProps;
       this.setState({ href: this.buildURI(data, uFEFF, headers, separator) });
     }
   }
@@ -60,16 +60,16 @@ class CSVLink extends React.Component {
     }
   }
 
-  handleAsyncClick(event) {
-    const done = proceed => {
-      if (proceed === false) {
-        event.preventDefault();
-        return;
-      }
-      this.handleLegacy(event);
-    };
+  done = proceed => {
+    if (proceed === false) {
+      return;
+    }
+    this.handleLegacy(event);
+  };
 
-    this.props.onClick(event, done);
+  handleAsyncClick(event) {
+
+    this.props.onClick(event, this.done);
   }
 
   handleSyncClick(event) {
